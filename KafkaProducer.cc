@@ -120,8 +120,8 @@ int CKafkaProducer::sendMessage(char *str, int len) {
                    err == RD_KAFKA_RESP_ERR__QUEUE_FULL ? " (backpressure)" : "");
         }
 
-        rd_kafka_poll(m_kafka_handle, 10); //Poll to handle delivery reports - 10 sec wait
-        rd_kafka_poll(m_kafka_handle, 0); //Poll to handle delivery reports -  non-blocking
+        rd_kafka_poll(m_kafka_handle, 10); //Poll to handle delivery reports - 10 miliseconds wait
+        //rd_kafka_poll(m_kafka_handle, 0); //Poll to handle delivery reports -  non-blocking
 
         ret = -2;
     }
