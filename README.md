@@ -1,5 +1,5 @@
 # kafka-cpp
-C++ client (producer and consumer) for Kafka, it leverage librdkafka https://github.com/edenhill/librdkafka
+C++ client (producer and consumer) for Kafka, it leverages librdkafka https://github.com/edenhill/librdkafka
 
 Simple producer
 
