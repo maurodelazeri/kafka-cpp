@@ -36,3 +36,17 @@ int main(int argc, char *argv[]) {
 }
 
 ```
+
+I'm using [Conan](https://conan.io/) to manage the dependences
+
+## build
+
+```
+mkdir build
+cd build
+conan install .. -s build_type=Debug --install-folder=. --build missing
+cmake ..
+make
+./bin/kafka_test
+```
+
