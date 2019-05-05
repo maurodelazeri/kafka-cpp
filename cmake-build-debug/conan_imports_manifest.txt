@@ -1,0 +1,7 @@
+1557072139
+/home/mauro/zinnion/kafka-test/cmake-build-debug/lib/librdkafka++.a: 15672051ba259292e8a469f684fdecad
+/home/mauro/zinnion/kafka-test/cmake-build-debug/lib/librdkafka++.so: a8217cda49562924e6275f5b05f640b7
+/home/mauro/zinnion/kafka-test/cmake-build-debug/lib/librdkafka++.so.1: a8217cda49562924e6275f5b05f640b7
+/home/mauro/zinnion/kafka-test/cmake-build-debug/lib/librdkafka.a: 3fccc1e701fb06a6a3309292e2684b50
+/home/mauro/zinnion/kafka-test/cmake-build-debug/lib/librdkafka.so: b06b29fc758f4a6c19fef201aced7130
+/home/mauro/zinnion/kafka-test/cmake-build-debug/lib/librdkafka.so.1: b06b29fc758f4a6c19fef201aced7130

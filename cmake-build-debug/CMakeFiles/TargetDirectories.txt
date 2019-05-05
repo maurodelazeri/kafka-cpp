@@ -1,0 +1,3 @@
+/home/mauro/zinnion/kafka-cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/mauro/zinnion/kafka-cpp/cmake-build-debug/CMakeFiles/kafka_test.dir
+/home/mauro/zinnion/kafka-cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
