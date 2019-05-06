@@ -96,11 +96,11 @@ bool KafkaProducer::produce(string& topic,string& mes,int32_t partition) {
         size_t len = mes.size();
         char *send_mes = &mes[0];
 
-        if ( rktMap.find(topic) == rktMap.end() ) {
-            std::cout << "not found message " << topic << std::endl;
-        } else {
-            std::cout << "found message " << std::endl;
-        }
+//         if ( rktMap.find(topic) == rktMap.end() ) {
+//             std::cout << "not found message " << topic << std::endl;
+//         } else {
+//             std::cout << "found message " << std::endl;
+//         }
 
         retry:
         if (rd_kafka_produce(
