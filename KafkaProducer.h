@@ -6,6 +6,7 @@
 #define RACCOON_KAFKAPRODUCER_H
 
 #include <string>
+#include <map>
 #include <csignal>
 #include <iostream>
 #include <stdlib.h>
@@ -22,7 +23,6 @@ using namespace std;
 #define TRUE          1
 class KafkaProducer{
 public:
-    KafkaProducer(const string& brokers, const string& topics/*, int32_t partition*/);
     KafkaProducer();
     virtual ~KafkaProducer();
     /*
@@ -32,19 +32,20 @@ public:
     */
     //void dr_msg_cb(rd_kafka_t *rk, const rd_kafka_message_t *rkmessage, void *opaque);//Callback
     bool PutBrokers(string);
-    bool PutTopics(string);
+    void PutTopics(vector<string> topics);
 
     bool initKafka();
     bool initKafka(void(*dr_msg_cb)(rd_kafka_t *rk, const rd_kafka_message_t *rkmessage, void *opaque));
-    bool produce(string& mes, int32_t partition);//Run the producer to produce the mes to the specified partition of the CI
+    bool produce(string& topic, string& mes, int32_t partition);//Run the producer to produce the mes to the specified partition of the CI
     //bool produce();
 private:
     rd_kafka_t *rk;            /*Producer instance handle*/
-    rd_kafka_topic_t *rkt;     /*Topic object*/
+    map< std::string, rd_kafka_topic_t*> rktMap;
+    vector<string> topics;
+
     rd_kafka_conf_t *conf;
     char errstr[512];
     string brokers;
-    string topics;
     //int32_t partition;
     int run = 1;
 };

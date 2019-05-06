@@ -17,12 +17,6 @@ static void dr_msg_cb(rd_kafka_t *rk,
         rkmessage->len, rkmessage->partition);*/
 }
 
-KafkaProducer::KafkaProducer(const string& brokers, const string& topics/*, int32_t partition*/)
-        :brokers(brokers),
-         topics(topics)
-{
-    initKafka(*dr_msg_cb);
-}
 KafkaProducer::KafkaProducer()
 {
 
@@ -31,7 +25,10 @@ KafkaProducer::~KafkaProducer()
 {
     fprintf(stderr, "%% Flushing final message.. \n");
     rd_kafka_flush(rk, 10 * 1000);
-    rd_kafka_topic_destroy(rkt);
+    for (auto itr = topics.begin(); itr != topics.end(); ++itr) {
+        std::string topic = std::string(*itr);
+        rd_kafka_topic_destroy(rktMap[topic]);
+    }
     rd_kafka_destroy(rk);
 }
 bool KafkaProducer::PutBrokers(string broker)
@@ -39,10 +36,9 @@ bool KafkaProducer::PutBrokers(string broker)
     brokers = broker;
     return true;
 }
-bool KafkaProducer::PutTopics(string topic)
+void KafkaProducer::PutTopics(vector<string> topics)
 {
-    topics = topic;
-    return true;
+    topics = topics;
 }
 bool KafkaProducer::initKafka()
 {
@@ -75,20 +71,22 @@ bool KafkaProducer::initKafka(void(*dr_msg_cb)(rd_kafka_t *rk,const rd_kafka_mes
     if (rd_kafka_brokers_add(rk, brokers.c_str()) == 0)
         fprintf(stderr, "%% No valid brokers specified\n");
 
-
-    rkt = rd_kafka_topic_new(rk, topic, NULL);
-    if (!rkt){
-        fprintf(stderr, "%% Failed to create topic object: %s\n",
-                rd_kafka_err2str(rd_kafka_last_error()));
-        rd_kafka_destroy(rk);
-        return 1;
+    for (auto itr = topics.begin(); itr != topics.end(); ++itr) {
+        std::string topic = std::string(*itr);
+        rd_kafka_topic_t *rkt = rd_kafka_topic_new(rk, topic.c_str(), NULL);
+        if (!rkt) {
+            fprintf(stderr, "%% Failed to create topic object: %s\n",
+                    rd_kafka_err2str(rd_kafka_last_error()));
+            rd_kafka_destroy(rk);
+            return 1;
+        }
+        rktMap[topic] = rkt;
     }
-
 
     return 0;
 }
 
-bool KafkaProducer::produce(string& mes,int32_t partition) {
+bool KafkaProducer::produce(string& topic,string& mes,int32_t partition) {
     while (run) {
         if (mes.empty()) {
             cout << "message is empty" << endl;
@@ -99,7 +97,7 @@ bool KafkaProducer::produce(string& mes,int32_t partition) {
 
         retry:
         if (rd_kafka_produce(
-                rkt,
+                rktMap[topic],
                 partition,
                 RD_KAFKA_MSG_F_COPY,
                 send_mes, len,
@@ -110,7 +108,7 @@ bool KafkaProducer::produce(string& mes,int32_t partition) {
                 goto retry;
             }
         } else {
-            std::cout << "Enqueued message (" << len << "bytes) for topic " << rd_kafka_topic_name(rkt) << std::endl;
+            std::cout << "Enqueued message (" << len << "bytes) for topic " << rd_kafka_topic_name(rktMap[topic]) << std::endl;
         }
         rd_kafka_poll(rk, 0);
         break;
