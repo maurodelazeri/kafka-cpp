@@ -2,39 +2,51 @@
 // Created by mauro on 5/5/19.
 //
 
-#ifndef KAFKA_TEST_KAFKAPRODUCER_H
-#define KAFKA_TEST_KAFKAPRODUCER_H
+#ifndef RACCOON_KAFKAPRODUCER_H
+#define RACCOON_KAFKAPRODUCER_H
 
+#include <string>
+#include <csignal>
+#include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <signal.h>
+#include "iostream"
+#include <fstream>
 #include "librdkafka/rdkafka.h"
+#include "librdkafka/rdkafkacpp.h"
 
-class CKafkaProducer {
+using namespace std;
+
+#define FALSE         0
+#define TRUE          1
+class KafkaProducer{
 public:
-    rd_kafka_t *m_kafka_handle;
-    rd_kafka_topic_t *m_kafka_topic;
-    rd_kafka_conf_t *m_kafka_conf;
-    rd_kafka_topic_conf_t *m_kafka_topic_conf;
-    rd_kafka_topic_partition_list_t *m_kafka_topic_partition_list;
+    KafkaProducer(const string& brokers, const string& topics/*, int32_t partition*/);
+    KafkaProducer();
+    virtual ~KafkaProducer();
+    /*
+     The callback function is called once per message, indicating that the message was successfully delivered (rkmessage->err == RD_KAFKA_RESP_ERR_NO_ERROR)
+     Still failed to pass (rkmessage->err != RD_KAFKA_RESP_ERR_NO_ERROR)
+     The callback function is triggered by rd_kafka_poll() and executed on the thread of the application.
+    */
+    //void dr_msg_cb(rd_kafka_t *rk, const rd_kafka_message_t *rkmessage, void *opaque);//Callback
+    bool PutBrokers(string);
+    bool PutTopics(string);
 
-    int m_partition;
-
-public:
-    CKafkaProducer();
-
-    ~CKafkaProducer();
-
-    int init(char *topic, char *brokers, int partition); //topic="test"; brokers="192.168.1.42:9092"; partition=0;
-    int sendMessage(char *str, int len);
-
-    static void err_cb(rd_kafka_t *rk, int err, const char *reason, void *opaque);
-
-    static void
-    throttle_cb(rd_kafka_t *rk, const char *broker_name, int32_t broker_id, int throttle_time_ms, void *opaque);
-
-    static void
-    offset_commit_cb(rd_kafka_t *rk, rd_kafka_resp_err_t err, rd_kafka_topic_partition_list_t *offsets, void *opaque);
-
-    static int stats_cb(rd_kafka_t *rk, char *json, size_t json_len, void *opaque);
-
+    bool initKafka();
+    bool initKafka(void(*dr_msg_cb)(rd_kafka_t *rk, const rd_kafka_message_t *rkmessage, void *opaque));
+    bool produce(string& mes, int32_t partition);//Run the producer to produce the mes to the specified partition of the CI
+    //bool produce();
+private:
+    rd_kafka_t *rk;            /*Producer instance handle*/
+    rd_kafka_topic_t *rkt;     /*Topic object*/
+    rd_kafka_conf_t *conf;
+    char errstr[512];
+    string brokers;
+    string topics;
+    //int32_t partition;
+    int run = 1;
 };
 
-#endif //KAFKA_TEST_KAFKAPRODUCER_H
+#endif //RACCOON_KAFKAPRODUCER_H

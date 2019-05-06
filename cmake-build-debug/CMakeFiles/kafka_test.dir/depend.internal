@@ -3,13 +3,17 @@
 
 CMakeFiles/kafka_test.dir/KafkaConsumer.cc.o
  /home/mauro/.conan/data/librdkafka/1.0.0/zinnion/stable/package/af0fbc5eb7376a4b9749db37a5c402b36d452909/include/librdkafka/rdkafka.h
+ /home/mauro/.conan/data/librdkafka/1.0.0/zinnion/stable/package/af0fbc5eb7376a4b9749db37a5c402b36d452909/include/librdkafka/rdkafkacpp.h
  /home/mauro/zinnion/kafka-cpp/KafkaConsumer.cc
  /home/mauro/zinnion/kafka-cpp/KafkaConsumer.h
+ /home/mauro/zinnion/kafka-cpp/KafkaProducer.h
 CMakeFiles/kafka_test.dir/KafkaProducer.cc.o
  /home/mauro/.conan/data/librdkafka/1.0.0/zinnion/stable/package/af0fbc5eb7376a4b9749db37a5c402b36d452909/include/librdkafka/rdkafka.h
+ /home/mauro/.conan/data/librdkafka/1.0.0/zinnion/stable/package/af0fbc5eb7376a4b9749db37a5c402b36d452909/include/librdkafka/rdkafkacpp.h
  /home/mauro/zinnion/kafka-cpp/KafkaProducer.cc
  /home/mauro/zinnion/kafka-cpp/KafkaProducer.h
 CMakeFiles/kafka_test.dir/main.cpp.o
  /home/mauro/.conan/data/librdkafka/1.0.0/zinnion/stable/package/af0fbc5eb7376a4b9749db37a5c402b36d452909/include/librdkafka/rdkafka.h
+ /home/mauro/.conan/data/librdkafka/1.0.0/zinnion/stable/package/af0fbc5eb7376a4b9749db37a5c402b36d452909/include/librdkafka/rdkafkacpp.h
  /home/mauro/zinnion/kafka-cpp/KafkaProducer.h
  /home/mauro/zinnion/kafka-cpp/main.cpp

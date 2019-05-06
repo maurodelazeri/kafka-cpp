@@ -1,51 +1,55 @@
 //
-// Created by mauro on 5/5/19.
+// Created by mauro on 5/6/19.
 //
 
-#ifndef KAFKA_TEST_KAFKACONSUMER_H
-#define KAFKA_TEST_KAFKACONSUMER_H
+#ifndef RACCOON_KAFKACONSUMER_H
+#define RACCOON_KAFKACONSUMER_H
 
+#include <string>
+#include <iostream>
+#include "librdkafka/rdkafkacpp.h"
 #include "librdkafka/rdkafka.h"
-#include <inttypes.h>
+#include "KafkaProducer.h"
+using namespace std;
 
-typedef void (*consumer_callback)(rd_kafka_message_t *rkmessage, void *opaque);
-
-
-class CKafkaConsumer {
+#define MAX_BUF      65536
+class KafkaConsumer
+{
 public:
-    rd_kafka_t *m_kafka_handle;
-    rd_kafka_topic_t *m_kafka_topic;
-    rd_kafka_conf_t *m_kafka_conf;
-    rd_kafka_topic_conf_t *m_kafka_topic_conf;
-    rd_kafka_topic_partition_list_t *m_kafka_topic_partition_list;
-    rd_kafka_queue_t *m_kafka_queue;
+    KafkaConsumer(const std::string& brokers, const std::string& topics, std::string groupid/*, int64_t offset*/);
+    //kafka_consumer_client();
+    virtual ~KafkaConsumer();
+    //init all configuration of kafka
+    bool initKafka();
+    //
+    string consume();
+    bool consume_clear();
 
-    consumer_callback m_consumer_callback;
-    void *m_consumer_callback_param;
+private:
+    //Process and print the messages that have been consumed
+    void msg_consume(rd_kafka_message_t *rkmessage, void *opaque);
 
-public:
-    CKafkaConsumer();
+    string brokers;
+    string topics;
+    string groupid;
 
-    ~CKafkaConsumer();
-
-    int init(char *topic, char *brokers, char *partitions, char *groupId, consumer_callback consumer_cb,
-             void *param_cb); //topic="my_test"; brokers="192.168.1.42:9092"; partitions="0,1,2"; groupId="my_group";
-    int getMessage();
-
-    static void err_cb(rd_kafka_t *rk, int err, const char *reason, void *opaque);
-
-    static void
-    throttle_cb(rd_kafka_t *rk, const char *broker_name, int32_t broker_id, int throttle_time_ms, void *opaque);
-
-    static void
-    offset_commit_cb(rd_kafka_t *rk, rd_kafka_resp_err_t err, rd_kafka_topic_partition_list_t *offsets, void *opaque);
-
-    static int stats_cb(rd_kafka_t *rk, char *json, size_t json_len, void *opaque);
-
-    static void logger(const rd_kafka_t *rk, int level, const char *fac, const char *buf);
-
-    static void msg_consume(rd_kafka_message_t *rkmessage, void *opaque);
+    rd_kafka_t *rk;// Destructed
+    rd_kafka_topic_t *rkt;
+    rd_kafka_topic_partition_list_t *topics_list;//
+    rd_kafka_conf_t *conf;
+    rd_kafka_topic_conf_t *topic_conf;
+    rd_kafka_resp_err_t err;
+    /*
+    int64_t last_offset_;
+    RdKafka::Consumer *kafka_consumer_;
+    RdKafka::Topic    *topic_;
+    int64_t           offset_;
+    //int32_t           partition;
+    */
+    int run;
+    char tmp[16];
+    char errstr[512];
 
 };
 
-#endif //KAFKA_TEST_KAFKACONSUMER_H
+#endif //RACCOON_KAFKACONSUMER_H
