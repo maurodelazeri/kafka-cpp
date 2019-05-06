@@ -31,7 +31,7 @@ public:
      The callback function is triggered by rd_kafka_poll() and executed on the thread of the application.
     */
     //void dr_msg_cb(rd_kafka_t *rk, const rd_kafka_message_t *rkmessage, void *opaque);//Callback
-    bool PutBrokers(string);
+    void PutBrokers(string);
     void PutTopics(vector<string> topics);
 
     bool initKafka();

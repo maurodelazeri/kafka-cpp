@@ -31,10 +31,9 @@ KafkaProducer::~KafkaProducer()
     }
     rd_kafka_destroy(rk);
 }
-bool KafkaProducer::PutBrokers(string broker)
+void KafkaProducer::PutBrokers(string broker)
 {
     brokers = broker;
-    return true;
 }
 void KafkaProducer::PutTopics(vector<string> topicsVec)
 {
@@ -71,8 +70,6 @@ bool KafkaProducer::initKafka(void(*dr_msg_cb)(rd_kafka_t *rk,const rd_kafka_mes
     if (rd_kafka_brokers_add(rk, brokers.c_str()) == 0)
         fprintf(stderr, "%% No valid brokers specified\n");
 
-    std::cout << "IM HEre " << topics.size() << std::endl;
-
     for (auto itr = topics.begin(); itr != topics.end(); ++itr) {
         std::cout << "creating new topic " << *itr << std::endl;
 
@@ -86,8 +83,6 @@ bool KafkaProducer::initKafka(void(*dr_msg_cb)(rd_kafka_t *rk,const rd_kafka_mes
         }
         rktMap[topic] = rkt;
     }
-
-    fprintf(stdout, "Kafka Initialized\n");
 
     return 0;
 }
