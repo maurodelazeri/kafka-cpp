@@ -36,9 +36,9 @@ bool KafkaProducer::PutBrokers(string broker)
     brokers = broker;
     return true;
 }
-void KafkaProducer::PutTopics(vector<string> topics)
+void KafkaProducer::PutTopics(vector<string> topicsVec)
 {
-    topics = topics;
+    topics = topicsVec;
 }
 bool KafkaProducer::initKafka()
 {
@@ -47,8 +47,8 @@ bool KafkaProducer::initKafka()
 }
 bool KafkaProducer::initKafka(void(*dr_msg_cb)(rd_kafka_t *rk,const rd_kafka_message_t *rkmessage, void *opaque))
 {
+
     string brokers = KafkaProducer::brokers;
-    const char *topic = KafkaProducer::topics.c_str();
 
     conf = rd_kafka_conf_new();
 
@@ -71,7 +71,11 @@ bool KafkaProducer::initKafka(void(*dr_msg_cb)(rd_kafka_t *rk,const rd_kafka_mes
     if (rd_kafka_brokers_add(rk, brokers.c_str()) == 0)
         fprintf(stderr, "%% No valid brokers specified\n");
 
+    std::cout << "IM HEre " << topics.size() << std::endl;
+
     for (auto itr = topics.begin(); itr != topics.end(); ++itr) {
+        std::cout << "creating new topic " << *itr << std::endl;
+
         std::string topic = std::string(*itr);
         rd_kafka_topic_t *rkt = rd_kafka_topic_new(rk, topic.c_str(), NULL);
         if (!rkt) {
@@ -82,6 +86,8 @@ bool KafkaProducer::initKafka(void(*dr_msg_cb)(rd_kafka_t *rk,const rd_kafka_mes
         }
         rktMap[topic] = rkt;
     }
+
+    fprintf(stdout, "Kafka Initialized\n");
 
     return 0;
 }
@@ -94,6 +100,12 @@ bool KafkaProducer::produce(string& topic,string& mes,int32_t partition) {
         }
         size_t len = mes.size();
         char *send_mes = &mes[0];
+
+        if ( rktMap.find(topic) == rktMap.end() ) {
+            std::cout << "not found message " << topic << std::endl;
+        } else {
+            std::cout << "found message " << std::endl;
+        }
 
         retry:
         if (rd_kafka_produce(
