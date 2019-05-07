@@ -5,8 +5,7 @@
 
 int main(int argc, char *argv[]) {
 
-    KafkaProducer* m_pProducerObject;
-    m_pProducerObject = new KafkaProducer();
+    std::shared_ptr<KafkaProducer> m_pProducerObject = std::make_shared<KafkaProducer>();
     m_pProducerObject->PutBrokers("xx.xx.xx.xx:9092");
     m_pProducerObject->PutTopics({"mauro","test"});
     m_pProducerObject->initKafka();
