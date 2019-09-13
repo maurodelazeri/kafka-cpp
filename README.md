@@ -1,8 +1,7 @@
 ### Kafka CPP
 
 You have in this repo a producer 
-here an example of a producer `kafka_p.cc  kafka_p.h` and consumers `kafka_c.cc  kafka_c.h ` for kafka build on top of librdkafka
-
+This repo contains two wrappers, one for produce `kafka_p.cc  kafka_p.h` and other to consume `kafka_c.cc  kafka_c.h ` from kafka
 
 Simple example of a producer:
 
