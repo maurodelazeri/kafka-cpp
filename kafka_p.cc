@@ -30,7 +30,7 @@ void KafkaP::stop()
 
 }
 
-bool KafkaP::init(const char* brokers, const char* topic, std::string& err_info, const char* clear_time_out, KafkaPCB* cb)
+bool KafkaP::init(const char* brokers, const char* topic, std::string& err_info, const char* clear_time_out, const char* ack, KafkaPCB* cb)
 {
     err_info.clear();
     err_info.resize(1024);
@@ -82,6 +82,14 @@ bool KafkaP::init(const char* brokers, const char* topic, std::string& err_info,
     if (rd_kafka_topic_conf_set(rdtopic_conf_,
                                 "message.timeout.ms",
                                 clear_time_out,
+                                (char*)err_info.data(),
+                                err_info.size()) != RD_KAFKA_CONF_OK) {
+        return false;
+    }
+
+    if (rd_kafka_topic_conf_set(rdtopic_conf_,
+                                "request.required.acks",
+                                ack,
                                 (char*)err_info.data(),
                                 err_info.size()) != RD_KAFKA_CONF_OK) {
         return false;

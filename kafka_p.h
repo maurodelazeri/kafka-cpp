@@ -48,8 +48,9 @@ public:
     // brokers,topic
     // err_info: Error message, correct for empty
     // clear_time_cout: Timeout cleaning time, will be lost after cleaning, but there will be callback notification after loss, default 1000ms
+    // ack: This field indicates the number of acknowledgements the leader broker must receive from ISR brokers before responding to the request: 0=Broker does not send any response/ack to client, -1 or all=Broker will block until message is committed by all in sync replicas, default 0
     // cb: Go back to the settings, there is no callback by default, if it is an important message, the send fails (the server is disconnected, etc.) or the callback is successful.
-    bool init(const char* brokers, const char* topic, std::string& err_info, const char* clear_time_out = "1000", KafkaPCB* cb = NULL);
+    bool init(const char* brokers, const char* topic, std::string& err_info, const char* clear_time_out = "1000", const char* ack = "0", KafkaPCB* cb = nullptr);
 
     // des: Safe shutdown
     void stop();
@@ -62,7 +63,7 @@ public:
     // key: The default is null, the message is not guaranteed to be in order, the partition is random, set the key (such as userID), the key must be ordered
     // key_len: Set at the same time as the key
     // time_out：Send wait time, 0 means non-blocking
-    bool produce(const char* data, uint16_t data_len, std::string& err_info, const char* key = NULL, uint16_t key_len = 0, uint32_t time_out = 0);
+    bool produce(const char* data, uint16_t data_len, std::string& err_info, const char* key = nullptr, uint16_t key_len = 0, uint32_t time_out = 0);
 
 private:
     static void produce_cb(rd_kafka_t *rk, const rd_kafka_message_t *rkmessage, void *opaque);
@@ -80,4 +81,5 @@ private:
     //topic
     rd_kafka_topic_t *rdtopic_;
     rd_kafka_topic_conf_t *rdtopic_conf_;
+
 };
