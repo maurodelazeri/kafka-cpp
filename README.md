@@ -1,6 +1,5 @@
 ### Kafka CPP
 
-You have in this repo a producer 
 This repo contains two wrappers, one for produce `kafka_p.cc  kafka_p.h` and other to consume `kafka_c.cc  kafka_c.h ` from kafka
 
 Simple example of a producer:
