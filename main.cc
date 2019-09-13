@@ -1,11 +1,7 @@
-### Kafka CPP
+//
+// Created by mauro on 9/13/19.
+//
 
-You have here a wrapper to produce and consume from kafka...
-
-here an example of a producer
-
-
-```c++
 #include <string>
 #include <unistd.h>
 #include "kafka_p.h"
@@ -34,4 +30,3 @@ int main(int argc, char *argv[]) {
     }
     return 0;
 }
-```
