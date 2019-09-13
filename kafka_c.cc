@@ -56,11 +56,6 @@ bool KafkaC::init(const char* brokers, const char* topic, std::string group, std
         err_info.append(temp);
         return false;
     }
-    // Commit record mode, the default is broker
-    if (RD_KAFKA_CONF_OK != rd_kafka_topic_conf_set(rd_topic_conf_, "offset.store.method", "broker", temp, sizeof(temp))) {
-        err_info.append(temp);
-        return false;
-    }
 
     // kafka conf
     rd_kafka_conf_ = rd_kafka_conf_new();

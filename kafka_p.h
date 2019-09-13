@@ -19,19 +19,22 @@ public:
     // The user can print the log according to the example self-failure callback.
     virtual void p_cb(rd_kafka_t *rk, const rd_kafka_message_t *rkmessage, void *opaque) {
         if (rkmessage->err) {
+//#if DEBUG
             std::cout << "kafka produce err, err_info="
                       << rd_kafka_err2str(rkmessage->err)
                       << "\n";
             //Own data，rkmessage->payload
             //Length of own data，rkmessage->len
+//#endif
         } else {
+//#if DEBUG
             std::cout << "kafka produce success, "
                       << "len="<< rkmessage->len
                       << ", partition=" << rkmessage->partition
                       << std::endl;
         }
-
     }
+//#endif
 };
 
 // Producer
@@ -50,7 +53,7 @@ public:
     // clear_time_cout: Timeout cleaning time, will be lost after cleaning, but there will be callback notification after loss, default 1000ms
     // ack: This field indicates the number of acknowledgements the leader broker must receive from ISR brokers before responding to the request: 0=Broker does not send any response/ack to client, -1 or all=Broker will block until message is committed by all in sync replicas, default 0
     // cb: Go back to the settings, there is no callback by default, if it is an important message, the send fails (the server is disconnected, etc.) or the callback is successful.
-    bool init(const char* brokers, const char* topic, std::string& err_info, const char* clear_time_out = "1000", const char* ack = "0", KafkaPCB* cb = nullptr);
+    bool init(const char* brokers, const char* topic, std::string& err_info, const char* clear_time_out = "1000", const char* ack = "1", KafkaPCB* cb = nullptr);
 
     // des: Safe shutdown
     void stop();
